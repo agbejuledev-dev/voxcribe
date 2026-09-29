@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Voxcribe — Speech to Text</title>
+
+    <meta
+        name="description"
+        content="Voxcribe is a polished speech-to-text workspace for recording, reviewing, editing and exporting transcripts."
+    >
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+</head>
+
+<body>
+
+<div class="app-shell">
+
+    <!-- =====================================================
+         SIDEBAR
+    ====================================================== -->
+
+    <aside class="sidebar">
+
+        <div class="brand">
+            <div class="brand-mark">
+                V
+            </div>
+
+            <div class="brand-copy">
+                <strong>Voxcribe</strong>
+                <span>Speech workspace</span>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+
+            <button
+                class="nav-item active"
+                id="newTranscriptBtn"
+                type="button"
+            >
+                <span class="nav-icon">＋</span>
+                <span>New Transcript</span>
+            </button>
+
+        </nav>
+
+        <div class="sidebar-bottom">
+
+            <div class="system-status">
+                <span class="status-dot"></span>
+
+                <div>
+                    <strong>System ready</strong>
+                    <span>Microphone available</span>
+                </div>
+            </div>
+
+            <div class="sidebar-footer">
+                Voxcribe
+                <span>•</span>
+                v1.0
+            </div>
+
+        </div>
+
+    </aside>
+
+
+    <!-- =====================================================
+         MAIN
+    ====================================================== -->
+
+    <main class="main-content">
+
+        <!-- TOPBAR -->
+
+        <header class="topbar">
+
+            <div class="topbar-left">
+
+                <span class="topbar-label">
+                    WORKSPACE
+                </span>
+
+                <h1>
+                    Live Transcription
+                </h1>
+
+            </div>
+
+            <div class="topbar-right">
+
+                <div class="connection-status">
+                    <span class="status-dot"></span>
+                    Ready
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- =================================================
+             CONTENT
+        ================================================== -->
+
+        <div class="content-container">
+
+            <!-- RECORDING -->
+
+            <section class="recording-section">
+
+                <div class="section-header">
+
+                    <div>
+
+                        <span class="section-label">
+                            RECORDING
+                        </span>
+
+                        <h2 id="recordingTitle">
+                            Ready to record
+                        </h2>
+
+                        <p id="recordingStatus">
+                            Press the button below to begin.
+                        </p>
+
+                    </div>
+
+                    <div class="language-control">
+
+                        <label for="languageSelect">
+                            Language
+                        </label>
+
+                        <select id="languageSelect">
+
+                            <option value="en-US">
+                                English (US)
+                            </option>
+
+                            <option value="en-GB">
+                                English (UK)
+                            </option>
+
+                            <option value="en-NG">
+                                English (Nigeria)
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <!-- VISUALIZER -->
+
+                <div
+                    class="visualizer"
+                    id="visualizer"
+                    aria-hidden="true"
+                >
+
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+
+                </div>
+
+
+                <!-- RECORD CONTROLS -->
+
+                <div class="recording-controls">
+
+                    <div class="recording-time">
+                        <span id="timer">
+                            00:00
+                        </span>
+                    </div>
+
+                    <button
+                        class="record-button"
+                        id="recordButton"
+                        type="button"
+                    >
+
+                        <span class="record-button-icon"></span>
+
+                        <span id="recordButtonText">
+                            Start recording
+                        </span>
+
+                    </button>
+
+                    <p
+                        class="record-hint"
+                        id="recordHint"
+                    >
+                        Your microphone will be used to capture audio.
+                    </p>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 AUDIO REVIEW
+            ================================================== -->
+
+            <section
+                class="audio-review-section"
+                id="audioReviewSection"
+            >
+
+                <div class="transcript-header">
+
+                    <div>
+
+                        <span class="section-label">
+                            RECORDING
+                        </span>
+
+                        <h2>
+                            Review your audio
+                        </h2>
+
+                    </div>
+
+                    <div
+                        class="audio-ready-status"
+                        id="audioReadyStatus"
+                    >
+                        No recording yet
+                    </div>
+
+                </div>
+
+
+                <div class="audio-player-card">
+
+                    <button
+                        class="audio-play-button"
+                        id="audioPlayButton"
+                        type="button"
+                        aria-label="Play recording"
+                        disabled
+                    >
+                        ▶
+                    </button>
+
+
+                    <div class="audio-main">
+
+                        <div class="audio-top-row">
+
+                            <span id="audioCurrentTime">
+                                00:00
+                            </span>
+
+                            <span id="audioDuration">
+                                00:00
+                            </span>
+
+                        </div>
+
+
+                        <input
+                            type="range"
+                            id="audioProgress"
+                            class="audio-progress"
+                            min="0"
+                            max="100"
+                            value="0"
+                            step="0.1"
+                            aria-label="Audio progress"
+                        >
+
+
+                        <div class="audio-bottom-row">
+
+                            <div class="audio-speed">
+
+                                <span>
+                                    Speed
+                                </span>
+
+                                <select id="audioSpeed">
+
+                                    <option value="0.75">
+                                        0.75×
+                                    </option>
+
+                                    <option value="1" selected>
+                                        1×
+                                    </option>
+
+                                    <option value="1.25">
+                                        1.25×
+                                    </option>
+
+                                    <option value="1.5">
+                                        1.5×
+                                    </option>
+
+                                    <option value="2">
+                                        2×
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+
+                            <div class="audio-volume">
+
+                                <span>
+                                    Volume
+                                </span>
+
+                                <input
+                                    type="range"
+                                    id="audioVolume"
+                                    min="0"
+                                    max="1"
+                                    value="1"
+                                    step="0.05"
+                                    aria-label="Volume"
+                                >
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <audio
+                    id="recordedAudio"
+                    preload="metadata"
+                ></audio>
+
+            </section>
+
+
+            <!-- =================================================
+                 TRANSCRIPT
+            ================================================== -->
+
+            <section class="transcript-section">
+
+                <div class="transcript-header">
+
+                    <div>
+
+                        <span class="section-label">
+                            TRANSCRIPT
+                        </span>
+
+                        <h2>
+                            Your transcript
+                        </h2>
+
+                    </div>
+
+                    <div class="transcript-actions">
+
+                        <button
+                            class="secondary-button"
+                            id="copyButton"
+                            type="button"
+                        >
+                            Copy
+                        </button>
+
+                        <button
+                            class="secondary-button"
+                            id="downloadButton"
+                            type="button"
+                        >
+                            Export
+                        </button>
+
+                        <button
+                            class="secondary-button danger-button"
+                            id="clearButton"
+                            type="button"
+                        >
+                            Clear
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <div class="transcript-card">
+
+                    <div
+                        class="live-transcript"
+                        id="liveTranscript"
+                        contenteditable="true"
+                        spellcheck="true"
+                        role="textbox"
+                        aria-multiline="true"
+                        aria-label="Editable transcript"
+                    >
+
+                        <span class="placeholder">
+                            Your transcription will appear here as you speak...
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="transcript-footer">
+
+                    <span id="wordCount">
+                        0 words
+                    </span>
+
+                    <span>
+                        Click inside the transcript to edit
+                    </span>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 FOOTER
+            ================================================== -->
+
+            <footer class="main-footer">
+
+                <span>
+                    Voxcribe
+                </span>
+
+                <span>
+                    Record. Review. Edit. Export.
+                </span>
+
+            </footer>
+
+        </div>
+
+    </main>
+
+</div>
+
+
+<script
+    src="{{ url_for('static', filename='app.js') }}"
+></script>
+
+</body>
+</html>
